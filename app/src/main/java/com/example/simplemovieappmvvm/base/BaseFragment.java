@@ -1,106 +1,124 @@
+/*
+ *  Copyright (C) 2017 MINDORKS NEXTGEN PRIVATE LIMITED
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      https://mindorks.com/license/apache-v2
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
 package com.example.simplemovieappmvvm.base;
 
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.otto.Bus;
 
-import timber.log.Timber;
+public abstract class BaseFragment<T extends ViewDataBinding, V extends BaseViewModel> extends Fragment {
 
+    private BaseActivity mActivity;
+    private View mRootView;
+    private T mViewDataBinding;
+    private V mViewModel;
 
-public class BaseFragment extends Fragment {
-    protected Bus bus ;
+    /**
+     * Override for set binding variable
+     *
+     * @return variable id
+     */
+    public abstract int getBindingVariable();
 
+    /**
+     * @return layout resource id
+     */
+    public abstract
+    @LayoutRes
+    int getLayoutId();
 
-
-    public boolean stopped;
-    public boolean paused;
-    public boolean destroyed;
+    /**
+     * Override for set view model
+     *
+     * @return view model instance
+     */
+    public abstract V getViewModel();
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Timber.i("onAttach");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof BaseActivity) {
+            BaseActivity activity = (BaseActivity) context;
+            this.mActivity = activity;
+            activity.onFragmentAttached();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = getViewModel();
+        setHasOptionsMenu(false);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mViewDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
+        mRootView = mViewDataBinding.getRoot();
+        return mRootView;
     }
 
     @Override
     public void onDetach() {
+        mActivity = null;
         super.onDetach();
-        Timber.i("onDetach");
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        bus = new Bus();
-        Timber.i("onCreate");
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewDataBinding.setVariable(getBindingVariable(), mViewModel);
+        mViewDataBinding.setLifecycleOwner(this);
+        mViewDataBinding.executePendingBindings();
     }
 
-    // Don't work as always overridden in subclasses.
-    // Call super.onCreateView() if you want this to work.
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.i("onCreateView");
-        return null;
+    public BaseActivity getBaseActivity() {
+        return mActivity;
     }
 
-    @Override
-    public void onStart() {
-        stopped = false;
-        super.onStart();
-        Timber.i("onStart");
+    public T getViewDataBinding() {
+        return mViewDataBinding;
     }
 
-    @Override
-    public void onStop() {
-        Timber.i("onStop");
-        super.onStop();
-        stopped = true;
+    public void hideKeyboard() {
+        if (mActivity != null) {
+            mActivity.hideKeyboard();
+        }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Timber.i("onConfigurationChanged");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        destroyed = true;
-        Timber.i("onDestroy");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Timber.i("onSaveInstanceState");
+    public boolean isNetworkConnected() {
+        return mActivity != null && mActivity.isNetworkConnected();
     }
 
 
-    @Override
-    public void onResume() {
-        paused = false;
-        Timber.i("onResume");
-        super.onResume();
 
-    }
+    public interface Callback {
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Timber.i("onPause");
-        paused = true;
-    }
+        void onFragmentAttached();
 
-    public Bus getBus() {
-        return bus;
+        void onFragmentDetached(String tag);
     }
 }

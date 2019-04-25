@@ -215,13 +215,13 @@ public class ScreenNavigationManager implements Navigator {
 
 
     private boolean isSameFragmentAlreadyPlaced(Screen type) {
-      /*  Fragment existing = activity.getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment existing = activity.getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (existing != null) {
             Class<? extends Fragment> requested = fragmentFactory.getFragmentClassByType(type);
             if (existing.getClass().equals(requested)) {
                 return true;
             }
-        }*/
+        }
         return false;
     }
 }

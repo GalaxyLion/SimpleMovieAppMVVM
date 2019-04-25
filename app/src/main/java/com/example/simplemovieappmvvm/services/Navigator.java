@@ -2,7 +2,6 @@ package com.example.simplemovieappmvvm.services;
 
 import android.os.Bundle;
 
-
 import com.example.simplemovieappmvvm.services.navigation.Screen;
 import com.example.simplemovieappmvvm.services.navigation.ScreenType;
 

@@ -5,7 +5,6 @@ import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 
-
 import com.example.simplemovieappmvvm.R;
 import com.example.simplemovieappmvvm.base.BaseActivity;
 import com.example.simplemovieappmvvm.services.navigation.BackNavigator;
