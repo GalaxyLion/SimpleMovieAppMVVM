@@ -20,4 +20,14 @@ public class LoginUtils {
             return true;
         }
     }
+
+    public static boolean validateConfirmPassword(String confirmPassword, String password) {
+        if (!confirmPassword.equals(password)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

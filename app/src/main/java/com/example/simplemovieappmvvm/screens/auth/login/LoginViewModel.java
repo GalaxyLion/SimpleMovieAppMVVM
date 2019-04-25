@@ -1,12 +1,8 @@
 package com.example.simplemovieappmvvm.screens.auth.login;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.text.TextUtils;
-import android.widget.Toast;
 
-import com.example.simplemovieappmvvm.R;
-import com.example.simplemovieappmvvm.base.App;
+import android.text.TextUtils;
+
 import com.example.simplemovieappmvvm.base.BaseViewModel;
 import com.example.simplemovieappmvvm.data.repositories.LoginLocalRepositoryRealmImpl;
 import com.example.simplemovieappmvvm.data.repositories.LoginRepository;
@@ -23,7 +19,6 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
 
 
     public LoginViewModel() {
-
         loginLocalRepositoryRealm = new LoginLocalRepositoryRealmImpl();
     }
 
@@ -44,7 +39,7 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
         return true;
     }
 
-    public void login(String email, String password) {
+    public void login(String email) {
         LoginEntityRealm loginEntityRealm = loginLocalRepositoryRealm.getExistUser(email);
         if (loginEntityRealm != null) {
             Prefs.putString(PrefsKeys.EMAIL, email);
@@ -61,9 +56,4 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
     }
 
 
-
-
-  /*  public void setNavigator(Navigator navigator){
-        this.navigator = navigator;
-    }*/
 }

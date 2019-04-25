@@ -8,4 +8,6 @@ public interface LoginNavigator {
 
     void navigateToRegister();
 
+    void showNotExistUser();
+
 }

@@ -2,7 +2,6 @@ package com.example.simplemovieappmvvm.screens.auth.login;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,15 +12,16 @@ import com.example.simplemovieappmvvm.R;
 import com.example.simplemovieappmvvm.base.App;
 import com.example.simplemovieappmvvm.base.BaseActivity;
 import com.example.simplemovieappmvvm.base.BaseFragment;
-import com.example.simplemovieappmvvm.databinding.LoginFragmentBinding;
+import com.example.simplemovieappmvvm.databinding.FragmentLoginBinding;
+
 import com.example.simplemovieappmvvm.services.navigation.Screen;
 import com.example.simplemovieappmvvm.services.navigation.ScreenType;
 
 
-public class LoginFragment extends BaseFragment<LoginFragmentBinding, LoginViewModel> implements LoginNavigator {
+public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewModel> implements LoginNavigator {
 
     private LoginViewModel viewModel;
-    private LoginFragmentBinding binding;
+    private FragmentLoginBinding binding;
     private BaseActivity activity;
 
     @Override
@@ -34,13 +34,13 @@ public class LoginFragment extends BaseFragment<LoginFragmentBinding, LoginViewM
     }
 
     @Override
-    public int getBindingVariable() {                   
+    public int getBindingVariable() {
         return BR.viewModel;
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.login_fragment;
+        return R.layout.fragment_login;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LoginFragment extends BaseFragment<LoginFragmentBinding, LoginViewM
         String password = binding.password.getText().toString();
         if (viewModel.isValidData(email, password)) {
             hideKeyboard();
-            viewModel.login(email, password);
+            viewModel.login(email);
         } else {
             showNotExistUser();
         }
@@ -72,7 +72,8 @@ public class LoginFragment extends BaseFragment<LoginFragmentBinding, LoginViewM
         activity.getNavigator().navigateTo(Screen.REGISTER, ScreenType.FRAGMENT);
     }
 
-    private void showNotExistUser() {
+    @Override
+    public void showNotExistUser() {
         Toast.makeText(App.getInstance().getApplicationContext(),
                 App.getInstance().getApplicationContext().getString(R.string.user) + " " +
                         App.getInstance().getApplicationContext().getString(R.string.user_not_exist),

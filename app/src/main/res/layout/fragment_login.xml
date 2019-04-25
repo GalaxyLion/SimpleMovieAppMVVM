@@ -26,7 +26,6 @@
             android:inputType="textEmailAddress"
             android:textColorHint="@color/colorPrimaryDark"
             android:textSize="18sp"
-            android:text="@{viewModel.login}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,6 @@
             android:inputType="textPassword"
             android:textColorHint="@color/colorPrimaryDark"
             android:textSize="18sp"
-            android:text="@{viewModel.password}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login" />
